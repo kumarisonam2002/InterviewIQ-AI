@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://interviewiq-ai-backend-th3f.onrender.com/api/:path*"
+    }
+  ]
+}
