@@ -45,6 +45,8 @@ function Step2Interview({ interviewData, onFinish }) {
 
   const [feedback, setFeedback] = useState("");
 
+  const [submissionError, setSubmissionError] = useState("");
+
   const [timeLeft, setTimeLeft] = useState(
     questions[0]?.timeLimit || 60
   );
@@ -703,7 +705,7 @@ function Step2Interview({ interviewData, onFinish }) {
 
       // Show feedback on screen
 
-      setFeedback(
+      setSubmissionError(
         noAnswerMessage
       );
 
@@ -713,9 +715,6 @@ function Step2Interview({ interviewData, onFinish }) {
       await speakText(
         noAnswerMessage
       );
-
-
-      setIsSubmitting(false);
 
       return;
     }
@@ -729,7 +728,9 @@ function Step2Interview({ interviewData, onFinish }) {
 
     setIsMicOn(false);
 
-    setIsSubmitting(true);
+   setSubmissionError("");
+
+   setIsSubmitting(true);
 
 
     try {
@@ -799,7 +800,7 @@ function Step2Interview({ interviewData, onFinish }) {
 
       // Show error in feedback box
 
-      setFeedback(
+      setSubmissionError(
         errorMessage
       );
 
@@ -1240,12 +1241,22 @@ function Step2Interview({ interviewData, onFinish }) {
 
             <textarea
               value={answer}
-              onChange={(e) =>
-                setAnswer(e.target.value)
-              }
+              onChange={(e) => {
+              setAnswer(e.target.value);
+
+              if (e.target.value.trim()) {
+                setSubmissionError("");
+             }
+           }}
               placeholder="Type your answer here..."
               className="w-full min-h-[330px] bg-gray-100 p-4 sm:p-6 rounded-2xl resize-none outline-none border border-gray-200 focus:ring-2 focus:ring-emerald-500 transition text-gray-800"
             />
+
+            {submissionError && (
+  <p className="mt-3 text-sm text-red-600">
+    {submissionError}
+  </p>
+)}
 
           </div>
 
